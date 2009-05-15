@@ -16,3 +16,39 @@ Installation
 3. Check the `Autocomplete, version 0.9.6-Return` and hit `Close`
 4. That's it! Now you can start coding and watch the popup working. Hit `Return`
    to accept the completion.
+
+License
+-------
+
+Copyright (C) 2009 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/)
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place, Suite 330, Boston, MA 02111-1307 USA
+
+Credits
+-------
+
+There are a lot of completions plugins in the Gnome GEdit Plugins page, and I 
+don't know what one was the first but this one is a product by:
+
+- Initial version: Osmo Salomaa <http://users.tkk.fi/~otsaloma/gedit/>
+- 0.9.6: Alin Avasilcutei <http://gedit-autocomp.sourceforge.net/>
+- 0.9.6-Return: Fabio Nagao <http://zend.lojcomm.com.br/>
+
+Changes
+-------
+
+> @2009-05-15
+> I did a brief read in the plugin, changed tabs into four spaces, fixed some
+> typos and made the required changes to make Return run as the trigger
+> instead of Tab.

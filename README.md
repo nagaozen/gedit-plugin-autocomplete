@@ -21,8 +21,7 @@ Installation
 License
 -------
 
-Copyright (C) 2009 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/)
-				   [Vincent Petithory](http://blog.lunar-dev.net/)
+Copyright (C) 2009 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/), [Vincent Petithory](http://blog.lunar-dev.net/)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

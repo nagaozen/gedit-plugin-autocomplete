@@ -10,11 +10,8 @@ plugin - a super useful built-in plugin that no one could live without.
 Installation
 ------------
 1. Run the `install` script
-	or
-   Copy the `autocomplete.gedit-plugin` and the `autocomplete`
-   into your `~/.gnome2/gedit/plugins/`
 2. Open gedit and click `Edit -> Preferences -> Plugins`
-3. Check the `Autocomplete, version 0.9.6-Return` and hit `Close`
+3. Check the `Autocomplete-0.9.7` and hit `Close`
 4. That's it! Now you can start coding and watch the popup working. Hit `Return`
    to accept the completion.
 
@@ -45,12 +42,16 @@ don't know what one was the first but this one is a product by:
 - Initial version: Osmo Salomaa <http://users.tkk.fi/~otsaloma/gedit/>
 - 0.9.6: Alin Avasilcutei <http://gedit-autocomp.sourceforge.net/>
 - 0.9.6-Return: Fabio Nagao <http://zend.lojcomm.com.br/>
-- 0.9.7-Return: Vincent Petithory <http://blog.lunar-dev.net/>
+- 0.9.7: Vincent Petithory <http://blog.lunar-dev.net/> (from 0.9.6-Return)
+
 
 Changes
 -------
 
 > @2009-10-03  
+> Added an plugin icon.Renamed the version to 0.9.7
+
+> @2009-10-04  
 > bugfix: Completion was active only on the last opened window. Previous 
 > opened windows lost the completion feature.
 

@@ -9,8 +9,9 @@ plugin - a super useful built-in plugin that no one could live without.
 
 Installation
 ------------
-
-1. Copy the `autocomplete.gedit-plugin` and the `autocomplete`
+1. Run the `install` script
+	or
+   Copy the `autocomplete.gedit-plugin` and the `autocomplete`
    into your `~/.gnome2/gedit/plugins/`
 2. Open gedit and click `Edit -> Preferences -> Plugins`
 3. Check the `Autocomplete, version 0.9.6-Return` and hit `Close`
@@ -21,6 +22,7 @@ License
 -------
 
 Copyright (C) 2009 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/)
+				   [Vincent Petithory](http://blog.lunar-dev.net/)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
@@ -44,9 +46,14 @@ don't know what one was the first but this one is a product by:
 - Initial version: Osmo Salomaa <http://users.tkk.fi/~otsaloma/gedit/>
 - 0.9.6: Alin Avasilcutei <http://gedit-autocomp.sourceforge.net/>
 - 0.9.6-Return: Fabio Nagao <http://zend.lojcomm.com.br/>
+- 0.9.7-Return: Vincent Petithory <http://blog.lunar-dev.net/>
 
 Changes
 -------
+
+> @2009-10-03  
+> bugfix: Completion was active only on the last opened window. Previous 
+> opened windows lost the completion feature.
 
 > @2009-05-15  
 > I did a brief read in the plugin, changed tabs into four spaces, fixed some

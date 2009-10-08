@@ -1,4 +1,6 @@
 import gedit
+import pygtk
+pygtk.require('2.0')
 import gtk
 import re
 
@@ -54,6 +56,82 @@ class AutoCompleteWindowHelper(gtk.Window):
         """Return the label text."""
         return self.label.get_text()
 
+class ConfigModel():
+	
+	def __init__(self,scope="global"):
+		self.scope = scope
+	
+	def set_scope(self,value):
+		self.scope = value
+		
+	def get_scope(self):
+		return self.scope
+
+class ConfigurationDialog(gtk.Dialog):
+	def __init__(self,config_model,callback):
+		gtk.Dialog.__init__(self,"Autocomplete settings",None,gtk.DIALOG_DESTROY_WITH_PARENT)
+		self.set_resizable(False)
+		self.config_model = config_model
+		self.callback = callback
+		
+		close_button = self.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+		close_button.grab_default()
+		help_button = self.add_button(gtk.STOCK_HELP, gtk.RESPONSE_HELP)
+		
+		help_button.connect_object("clicked", self.show_help_dialog,None)
+		close_button.connect_object("clicked", gtk.Widget.destroy,self)
+		
+		scope_box = gtk.HBox(False, 0)
+		scope_box.set_border_width(25)
+		
+		scope_label = gtk.Label("Scope : ")
+		global_scope_button = gtk.RadioButton(None, "global")
+		local_scope_button = gtk.RadioButton(global_scope_button, "local for each window")
+		
+		if config_model.get_scope() == "global":
+			global_scope_button.set_active(True)
+		else:
+			local_scope_button.set_active(True)
+		
+		# NOTE : if connecting to local_scope_button too, even with clicked, 
+		# 		 the callback function is called twice.
+		#		 So we just connect that button
+		global_scope_button.connect_object("toggled", self.configuration_change,None)
+		
+		self.global_scope_button = global_scope_button;
+		self.local_scope_button = local_scope_button;
+		
+		scope_box.pack_start(scope_label, True, True, 0)
+		scope_box.add(global_scope_button)
+		scope_box.add(local_scope_button)
+		
+		self.vbox.pack_start(scope_box, True, True, 0)
+		scope_box.show_all()
+	
+	def get_config_model(self):
+		return self.config_model
+	
+	def configuration_change(self,widget,data=None):
+		if self.global_scope_button.get_active():
+			self.config_model.set_scope("global")
+		else:
+			self.config_model.set_scope("local")
+		
+		self.callback()
+	
+	def show_help_dialog(self,widget,data=None):
+		help_dialog = gtk.Dialog("Autocomplete plugin help")
+		close_button = help_dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+		close_button.grab_default()
+		close_button.connect_object("clicked", gtk.Widget.destroy, help_dialog)
+		
+		inner_box = gtk.HBox(False, 0)
+		inner_box.set_border_width(40)
+		help_label = gtk.Label("Help is coming soon...")
+		
+		inner_box.pack_start(help_label, True, True, 0)
+		help_dialog.vbox.pack_start(inner_box, True, True, 0)
+		help_dialog.show_all()
 
 class AutoCompletePlugin(gedit.Plugin):
 	def __init__(self):
@@ -62,12 +140,16 @@ class AutoCompletePlugin(gedit.Plugin):
 		self.eng_map = {}
 		self.words = {}
 		self.dictionary_words = []
+		# TODO get settings from file
+		self.config = ConfigModel()
 		
 	def activate(self, window):
 		self.windows_count += 1
+		# Create autocomplete engine in global scope mode
 		engine = AutoCompleteEngine(str(self.windows_count), self.words,self.dictionary_words)
 		engine.activate(window)
 		self.eng_map[window] = engine
+		# TODO Switch to local scope if necessary
 		
 	def deactivate(self, window):
 		self.windows_count -= 1
@@ -76,7 +158,29 @@ class AutoCompletePlugin(gedit.Plugin):
 		self.eng_map[window] = None
 		del self.eng_map[window]
 	
+	def is_configurable(self):
+		return True
+
+	def create_configure_dialog(self):
+		dialog = ConfigurationDialog(self.config,self.config_changed_callback)
+		return dialog
 	
+	def config_changed_callback(self):
+		#d1 = gtk.Dialog("Update")
+		#d1.show()
+		is_scope_local = self.config.get_scope() == "local"
+		if is_scope_local:
+			for window in self.eng_map:
+				engine = self.eng_map[window]
+				engine.set_local_scope()
+		else:
+			for window in self.eng_map:
+				engine = self.eng_map[window]
+				engine.set_global_scope(self.words,self.dictionary_words)
+			
+		
+		
+
 class AutoCompleteEngine():
 	"""Automatically complete words with the Return key."""
 	def __init__(self,id,words={},dictionary_words=[]):
@@ -87,14 +191,19 @@ class AutoCompleteEngine():
 		self.last_typed_line = None
 		self.words = words
 		self.dictionary_words = dictionary_words
-
-	def reset_dictionary():
-		"""Resets the dictionary and rescans the current window docs."""
+	
+	def set_local_scope(self):
 		self.words = {}
 		self.dictionary_words = []
 		for doc in window.get_documents():
 			self.scan(doc)
-
+	
+	def set_global_scope(self,words,dictionary_words):
+		self.words = words;
+		self.dictionary_words = dictionary_words;
+		for doc in window.get_documents():
+			self.scan(doc)
+	
 	def activate(self, window):
 		"""Activate plugin."""
 		self.window = window

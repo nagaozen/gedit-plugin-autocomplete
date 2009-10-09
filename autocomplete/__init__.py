@@ -141,7 +141,7 @@ class AutoCompletePlugin(gedit.Plugin):
 		self.words = {}
 		self.dictionary_words = []
 		# TODO get settings from filesystem
-		self.config = ConfigModel("local")
+		self.config = ConfigModel("global")
 		
 	def activate(self, window):
 		self.windows_count += 1

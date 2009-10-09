@@ -88,7 +88,7 @@ class ConfigurationDialog(gtk.Dialog):
 		global_scope_button = gtk.RadioButton(None, "global")
 		local_scope_button = gtk.RadioButton(global_scope_button, "local for each window")
 		
-		if config_model.get_scope() == "global":
+		if self.config_model.get_scope() == "global":
 			global_scope_button.set_active(True)
 		else:
 			local_scope_button.set_active(True)
@@ -140,23 +140,33 @@ class AutoCompletePlugin(gedit.Plugin):
 		self.eng_map = {}
 		self.words = {}
 		self.dictionary_words = []
-		# TODO get settings from file
-		self.config = ConfigModel()
+		# TODO get settings from filesystem
+		self.config = ConfigModel("local")
 		
 	def activate(self, window):
 		self.windows_count += 1
-		# Create autocomplete engine in global scope mode
-		engine = AutoCompleteEngine(str(self.windows_count), self.words,self.dictionary_words)
+		if self.config.get_scope() == "global":
+			self.activate_with_global_scope(window)
+		else:
+			self.activate_with_local_scope(window)
+	
+	def activate_with_local_scope(self,window):
+		# Create autocomplete engine in local scope mode
+		engine = AutoCompleteEngine(str(self.windows_count),{},[])
 		engine.activate(window)
 		self.eng_map[window] = engine
-		# TODO Switch to local scope if necessary
-		
+	
+	def activate_with_global_scope(self,window):
+		# Create autocomplete engine in global scope mode
+		engine = AutoCompleteEngine(str(self.windows_count), self.words, self.dictionary_words)
+		engine.activate(window)
+		self.eng_map[window] = engine
+	
 	def deactivate(self, window):
 		self.windows_count -= 1
 		engine = self.eng_map[window]
 		engine.deactivate(window)
 		self.eng_map[window] = None
-		del self.eng_map[window]
 	
 	def is_configurable(self):
 		return True
@@ -166,20 +176,23 @@ class AutoCompletePlugin(gedit.Plugin):
 		return dialog
 	
 	def config_changed_callback(self):
-		#d1 = gtk.Dialog("Update")
-		#d1.show()
-		is_scope_local = self.config.get_scope() == "local"
-		if is_scope_local:
-			for window in self.eng_map:
-				engine = self.eng_map[window]
-				engine.set_local_scope()
-		else:
-			for window in self.eng_map:
-				engine = self.eng_map[window]
-				engine.set_global_scope(self.words,self.dictionary_words)
-			
+		ws = []
+		for w in self.eng_map:
+			self.deactivate(w)
+			ws.append(w)
+
+		self.eng_map = None
+		self.words = None
+		self.dictionary_words = None
+
+		self.windows_count = 0
+		self.eng_map = {}
+		self.words = {}
+		self.dictionary_words = []
+		for window2 in ws:
+			self.activate(window2)
 		
-		
+	
 
 class AutoCompleteEngine():
 	"""Automatically complete words with the Return key."""
@@ -191,18 +204,6 @@ class AutoCompleteEngine():
 		self.last_typed_line = None
 		self.words = words
 		self.dictionary_words = dictionary_words
-	
-	def set_local_scope(self):
-		self.words = {}
-		self.dictionary_words = []
-		for doc in window.get_documents():
-			self.scan(doc)
-	
-	def set_global_scope(self,words,dictionary_words):
-		self.words = words;
-		self.dictionary_words = dictionary_words;
-		for doc in window.get_documents():
-			self.scan(doc)
 	
 	def activate(self, window):
 		"""Activate plugin."""
@@ -219,9 +220,22 @@ class AutoCompleteEngine():
 			self.connect_view(view)
 		
 		for doc in window.get_documents():
+			# configure tabs already displayed
+			self.configure_tab(window, gedit.tab_get_from_document(doc))
+			# connect doc and scan
 			self.connect_document(doc)
 			self.scan(doc)
-
+			
+		
+	
+	def configure_tab(self, window, tab):
+		"""Connect the document and view in tab."""
+		context = tab.get_view().get_pango_context()
+		font_desc = context.get_font_description()
+		self.tip.set_font_description(font_desc)
+		self.connect_document(tab.get_document())
+		self.connect_view(tab.get_view())
+	
 	def cancel(self):
 		"""Hide the completion tip and return False."""
 		self.hide_tip()
@@ -636,13 +650,8 @@ class AutoCompleteEngine():
 		return filtered_alternatives
 
 	def on_window_tab_added(self, window, tab):
-		"""Connect the document and view in tab."""
-		context = tab.get_view().get_pango_context()
-		font_desc = context.get_font_description()
-		self.tip.set_font_description(font_desc)
-		self.connect_document(tab.get_document())
-		self.connect_view(tab.get_view())
-
+		self.configure_tab(window,tab)
+	
 	def on_window_tab_removed(self, window, tab):
 		"""Remove document's word set."""
 		doc = tab.get_document()

@@ -15,6 +15,7 @@ class AutoCompletePlugin(gedit.Plugin):
 		self.dictionary_words = []
 		self.filepath = '~/.gnome2/gedit/autocomplete_settings.xml'
 		
+		self.base_text = "bonjour magalie"
 		self.config = ConfigModel(self.filepath)
 		self.config.load()
 		
@@ -27,13 +28,13 @@ class AutoCompletePlugin(gedit.Plugin):
 	
 	def activate_with_local_scope(self,window):
 		# Create autocomplete engine in local scope mode
-		engine = AutoCompleteEngine(str(self.windows_count),{},[])
+		engine = AutoCompleteEngine(str(self.windows_count), {}, [], self.base_text)
 		engine.activate(window)
 		self.eng_map[window] = engine
 	
 	def activate_with_global_scope(self,window):
 		# Create autocomplete engine in global scope mode
-		engine = AutoCompleteEngine(str(self.windows_count), self.words, self.dictionary_words)
+		engine = AutoCompleteEngine(str(self.windows_count), self.words, self.dictionary_words, self.base_text)
 		engine.activate(window)
 		self.eng_map[window] = engine
 	

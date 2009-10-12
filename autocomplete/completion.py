@@ -56,7 +56,9 @@ class AutoCompleteWindowHelper(gtk.Window):
 
 class AutoCompleteEngine():
 	"""Automatically complete words with the Return key."""
-	def __init__(self, id, words = None,dictionary_words = None):
+	def __init__(self, id, words = None,dictionary_words = None, base_text = ""):
+		self.base_text = base_text
+		
 		self.completion = None
 		self.id_name    = 'AutoCompletePluginID_'+id
 		self.tip        = None
@@ -520,9 +522,21 @@ class AutoCompleteEngine():
 		doc = tab.get_document()
 		if doc in self.words:
 			self.words.pop(doc)
-
-	def scan(self, doc, what_to_scan='ALL_WORDS'):
-		"""Scan document for new words."""
+	
+	def scan_text(self, text, what_to_scan='ALL_WORDS'):
+		word_set = None
+		
+		if what_to_scan == 'ALL_WORDS':
+			word_set = frozenset(RE_COMPOUND_WORD_SYNTAX.findall(text))
+			word_set = word_set.union(RE_SIMPLE_WORD_SYNTAX.findall(text))
+		elif what_to_scan == 'SIMPLE_WORDS':
+			word_set = frozenset(RE_SIMPLE_WORD_SYNTAX.findall(text))
+		elif what_to_scan == 'COMPOUND_WORDS':
+			word_set = frozenset(RE_COMPOUND_WORD_SYNTAX.findall(text))
+		
+		self.dictionary_words.update(word_set)
+		
+	def scan_doc(self, doc, what_to_scan='ALL_WORDS'):
 		text = doc.get_text(*doc.get_bounds())
 		if what_to_scan == 'ALL_WORDS':
 			self.words[doc] = frozenset(RE_COMPOUND_WORD_SYNTAX.findall(text))
@@ -531,10 +545,16 @@ class AutoCompleteEngine():
 			self.words[doc] = frozenset(RE_SIMPLE_WORD_SYNTAX.findall(text))
 		elif what_to_scan == 'COMPOUND_WORDS':
 			self.words[doc] = frozenset(RE_COMPOUND_WORD_SYNTAX.findall(text))
-		self.dictionary_words = set([])
+		
 		for word in self.words.values():
 			self.dictionary_words.update(word)
-	#        self.dictionary_words.update(self.words[doc])
+		
+	
+	def scan(self, doc, what_to_scan='ALL_WORDS'):
+		"""Scan document for new words."""
+		self.dictionary_words = set([])
+		self.scan_doc(doc,what_to_scan)
+		self.scan_text(self.base_text,what_to_scan)
 		self.dictionary_words = list(self.dictionary_words)
 		self.dictionary_words.sort()
 

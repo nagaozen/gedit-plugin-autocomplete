@@ -1,3 +1,24 @@
+"""
+ completion.py
+ This file is part of "Gedit Autocomplete"
+ Copyright (C) 2009 - Vincent Petithory, Fabio Zendhi Nagao
+ 
+ "Gedit Autocomplete" is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ 
+ "Gedit Autocomplete" is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with "Gedit Autocomplete"; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, 
+ Boston, MA  02110-1301  USA
+"""
+
 import gedit
 import gtk
 import re
@@ -56,9 +77,8 @@ class AutoCompleteWindowHelper(gtk.Window):
 
 class AutoCompleteEngine():
 	"""Automatically complete words with the Return key."""
-	def __init__(self, id, words = None,dictionary_words = None, base_text = ""):
-		self.base_text = base_text
-		
+	def __init__(self, id, config, words = None,dictionary_words = None):
+		self.config = config
 		self.completion = None
 		self.id_name    = 'AutoCompletePluginID_'+id
 		self.tip        = None
@@ -92,7 +112,6 @@ class AutoCompleteEngine():
 			self.connect_document(doc)
 			self.scan(doc)
 			
-	
 	def configure_tab(self, window, tab):
 		"""Connect the document and view in tab."""
 		context = tab.get_view().get_pango_context()
@@ -554,7 +573,7 @@ class AutoCompleteEngine():
 		"""Scan document for new words."""
 		self.dictionary_words = set([])
 		self.scan_doc(doc,what_to_scan)
-		self.scan_text(self.base_text,what_to_scan)
+		self.scan_text(self.config.get_base_words(),what_to_scan)
 		self.dictionary_words = list(self.dictionary_words)
 		self.dictionary_words.sort()
 

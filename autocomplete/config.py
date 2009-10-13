@@ -1,3 +1,24 @@
+"""
+ config.py
+ This file is part of "Gedit Autocomplete"
+ Copyright (C) 2009 - Vincent Petithory, Fabio Zendhi Nagao
+ 
+ "Gedit Autocomplete" is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ 
+ "Gedit Autocomplete" is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with "Gedit Autocomplete"; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, 
+ Boston, MA  02110-1301  USA
+"""
+
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -9,7 +30,7 @@ class ConfigModel():
 	def __init__(self, filepath):
 		# init default values
 		self.scope = "global"
-		
+		self.base_words = ""
 		self.filepath = filepath
 		self.sv = ConfigService(self, filepath)
 		
@@ -19,11 +40,17 @@ class ConfigModel():
 	def save(self):
 		self.sv.save()
 		
+	def get_scope(self):
+		return self.scope
+	
 	def set_scope(self,value):
 		self.scope = value
 		
-	def get_scope(self):
-		return self.scope
+	def get_base_words(self):
+		return self.base_words
+		
+	def set_base_words(self,value):
+		self.base_words = value
 
 class ConfigService():
 	def __init__(self, config, filepath):
@@ -53,7 +80,8 @@ class ConfigService():
 		fp = file(self.file, "wb")
 		fp.write('<?xml version="1.0" encoding="UTF-8"?>\n')
 		scope_dump = '    <scope>%s</scope>\n' % self._escape(self.config.get_scope())
-		settings = '<autocomplete>\n%s</autocomplete>\n' % scope_dump;
+		base_words_dump = '    <words>%s</words>\n' % self._escape(self.config.get_base_words())
+		settings = '<autocomplete>\n%s</autocomplete>\n' % scope_dump+base_words_dump;
 		fp.write(settings)
 		fp.close()
 		
@@ -66,11 +94,15 @@ class ConfigService():
 	def __start_element(self, tag, attrs):
 		if tag == 'scope':
 			self.current_tag = 'scope'
+		elif tag == 'words':
+			self.current_tag = 'words'
 	def __end_element(self, tag):
 		self.current_tag = None
 	def __character_data(self, data):
 		if self.current_tag == 'scope':
 			self.config.set_scope(data)
+		elif self.current_tag == 'words':
+			self.config.set_base_words(data)
 	
 class ConfigurationDialog(gtk.Dialog):
 	def __init__(self,config,callback):
@@ -109,6 +141,8 @@ class ConfigurationDialog(gtk.Dialog):
 		scope_box.pack_start(scope_label, True, True, 0)
 		scope_box.add(global_scope_button)
 		scope_box.add(local_scope_button)
+		
+		# TODO make entry for base_words
 		
 		self.vbox.pack_start(scope_box, True, True, 0)
 		scope_box.show_all()

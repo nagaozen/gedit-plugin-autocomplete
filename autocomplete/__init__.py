@@ -1,3 +1,24 @@
+"""
+ __init__.py
+ This file is part of "Gedit Autocomplete"
+ Copyright (C) 2009 - Vincent Petithory, Fabio Zendhi Nagao
+ 
+ "Gedit Autocomplete" is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ 
+ "Gedit Autocomplete" is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with "Gedit Autocomplete"; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, 
+ Boston, MA  02110-1301  USA
+"""
+
 import gedit
 
 from completion import AutoCompleteEngine
@@ -15,7 +36,6 @@ class AutoCompletePlugin(gedit.Plugin):
 		self.dictionary_words = []
 		self.filepath = '~/.gnome2/gedit/autocomplete_settings.xml'
 		
-		self.base_text = "bonjour magalie"
 		self.config = ConfigModel(self.filepath)
 		self.config.load()
 		
@@ -28,13 +48,13 @@ class AutoCompletePlugin(gedit.Plugin):
 	
 	def activate_with_local_scope(self,window):
 		# Create autocomplete engine in local scope mode
-		engine = AutoCompleteEngine(str(self.windows_count), {}, [], self.base_text)
+		engine = AutoCompleteEngine(str(self.windows_count), self.config, {}, [])
 		engine.activate(window)
 		self.eng_map[window] = engine
 	
 	def activate_with_global_scope(self,window):
 		# Create autocomplete engine in global scope mode
-		engine = AutoCompleteEngine(str(self.windows_count), self.words, self.dictionary_words, self.base_text)
+		engine = AutoCompleteEngine(str(self.windows_count), self.config, self.words, self.dictionary_words)
 		engine.activate(window)
 		self.eng_map[window] = engine
 	

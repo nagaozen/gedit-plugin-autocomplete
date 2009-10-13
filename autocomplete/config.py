@@ -118,7 +118,7 @@ class ConfigurationDialog(gtk.Dialog):
 		help_button.connect_object("clicked", self.show_help_dialog,None)
 		close_button.connect_object("clicked", gtk.Widget.destroy,self)
 		
-		scope_box = gtk.HBox(False, 0)
+		scope_box = gtk.VBox(False, 0)
 		scope_box.set_border_width(25)
 		
 		scope_label = gtk.Label("Scope : ")
@@ -144,8 +144,35 @@ class ConfigurationDialog(gtk.Dialog):
 		
 		# TODO make entry for base_words
 		
+		words_box = gtk.VBox(False, 0)
+		words_box.set_border_width(25)
+		
+		words_label = gtk.Label("Enter words you want to have in the completion list by default : ")
+		words_text_view = gtk.TextView()
+		words_text_view.set_editable(True)
+		words_text_view.set_wrap_mode(gtk.WRAP_WORD)
+		words_text_view.set_border_width(0)
+		words_text_view.set_size_request(-1, 110)
+		words_text_view.set_left_margin(3)
+		words_text_view.set_right_margin(3)
+		
+		words_buffer = gtk.TextBuffer()
+		words_buffer.set_text(self.config.get_base_words())
+		words_text_view.set_buffer(words_buffer)
+		words_buffer.connect_object("changed", self.configuration_change,None)
+		
+		self.words_buffer = words_buffer
+		
+		words_box.pack_start(words_label, True, True, 0)
+		sw = gtk.ScrolledWindow()
+		sw.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
+		sw.add(words_text_view)
+		words_box.add(sw)
+		
 		self.vbox.pack_start(scope_box, True, True, 0)
-		scope_box.show_all()
+		self.vbox.add(words_box)
+		self.show()
+		self.vbox.show_all()
 	
 	def get_config(self):
 		return self.config
@@ -156,6 +183,7 @@ class ConfigurationDialog(gtk.Dialog):
 		else:
 			self.config.set_scope("local")
 		
+		self.config.set_base_words(self.words_buffer.get_text(self.words_buffer.get_start_iter(),self.words_buffer.get_end_iter(),True))
 		self.config.save()
 		self.callback()
 	

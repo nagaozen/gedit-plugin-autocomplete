@@ -29,7 +29,6 @@ class ConfigModel():
 	
 	def __init__(self, filepath):
 		# init default values
-		self.changed = True
 		self.scope = "global"
 		self.base_words = ""
 		self.filepath = filepath
@@ -37,9 +36,6 @@ class ConfigModel():
 		
 	def load(self):
 		self.sv.load()
-		
-	def has_changed():
-		return self.changed
 		
 	def save(self):
 		self.sv.save()
@@ -49,14 +45,12 @@ class ConfigModel():
 	
 	def set_scope(self,value):
 		self.scope = value
-		self.changed = True
 		
 	def get_base_words(self):
 		return self.base_words
 		
 	def set_base_words(self,value):
 		self.base_words = value
-		self.changed = True
 
 class ConfigService():
 	def __init__(self, config, filepath):

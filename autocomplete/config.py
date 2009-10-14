@@ -29,6 +29,7 @@ class ConfigModel():
 	
 	def __init__(self, filepath):
 		# init default values
+		self.changed = True
 		self.scope = "global"
 		self.base_words = ""
 		self.filepath = filepath
@@ -36,6 +37,9 @@ class ConfigModel():
 		
 	def load(self):
 		self.sv.load()
+		
+	def has_changed():
+		return self.changed
 		
 	def save(self):
 		self.sv.save()
@@ -45,12 +49,14 @@ class ConfigModel():
 	
 	def set_scope(self,value):
 		self.scope = value
+		self.changed = True
 		
 	def get_base_words(self):
 		return self.base_words
 		
 	def set_base_words(self,value):
 		self.base_words = value
+		self.changed = True
 
 class ConfigService():
 	def __init__(self, config, filepath):
@@ -81,7 +87,7 @@ class ConfigService():
 		fp.write('<?xml version="1.0" encoding="UTF-8"?>\n')
 		scope_dump = '    <scope>%s</scope>\n' % self._escape(self.config.get_scope())
 		base_words_dump = '    <words>%s</words>\n' % self._escape(self.config.get_base_words())
-		settings = '<autocomplete>\n%s</autocomplete>\n' % scope_dump+base_words_dump;
+		settings = '<autocomplete>\n%s</autocomplete>\n' % (scope_dump+base_words_dump);
 		fp.write(settings)
 		fp.close()
 		
@@ -157,15 +163,17 @@ class ConfigurationDialog(gtk.Dialog):
 		words_text_view.set_right_margin(3)
 		
 		words_buffer = gtk.TextBuffer()
+		
 		words_buffer.set_text(self.config.get_base_words())
 		words_text_view.set_buffer(words_buffer)
 		words_buffer.connect_object("changed", self.configuration_change,None)
 		
 		self.words_buffer = words_buffer
 		
-		words_box.pack_start(words_label, True, True, 0)
+		words_box.pack_start(words_label, True, True, 10)
 		sw = gtk.ScrolledWindow()
 		sw.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
+		sw.set_shadow_type(gtk.SHADOW_IN)
 		sw.add(words_text_view)
 		words_box.add(sw)
 		

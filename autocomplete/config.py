@@ -121,9 +121,27 @@ class ConfigurationDialog(gtk.Dialog):
 		scope_box = gtk.VBox(False, 0)
 		scope_box.set_border_width(25)
 		
-		scope_label = gtk.Label("Scope : ")
+		box_scope_label = gtk.HBox(False,10)
+		scope_label = gtk.Label("<b>Scope</b>")
+		scope_label.set_use_markup(True)
+		scope_label.set_justify(gtk.JUSTIFY_LEFT)
+		box_scope_label.pack_start(scope_label, False, False, 0)
+		
+		box_gsb = gtk.HBox(False,0)
 		global_scope_button = gtk.RadioButton(None, "global")
+		global_scope_label_indent = gtk.Label("    ")
+		global_scope_label_indent.set_justify(gtk.JUSTIFY_LEFT)
+		
+		box_lsb = gtk.HBox(False,0)
 		local_scope_button = gtk.RadioButton(global_scope_button, "local for each window")
+		local_scope_label_indent = gtk.Label("    ")
+		local_scope_label_indent.set_justify(gtk.JUSTIFY_LEFT)
+		
+		box_gsb.pack_start(global_scope_label_indent,False,False,0)
+		box_gsb.pack_start(global_scope_button,False,False,0)
+		
+		box_lsb.pack_start(local_scope_label_indent,False,False,0)
+		box_lsb.pack_start(local_scope_button,False,False,0)
 		
 		if self.config.get_scope() == "global":
 			global_scope_button.set_active(True)
@@ -138,21 +156,33 @@ class ConfigurationDialog(gtk.Dialog):
 		self.global_scope_button = global_scope_button;
 		self.local_scope_button = local_scope_button;
 		
-		scope_box.pack_start(scope_label, True, True, 0)
-		scope_box.add(global_scope_button)
-		scope_box.add(local_scope_button)
 		
-		# TODO make entry for base_words
+		scope_box.pack_start(box_scope_label)
+		scope_box.pack_start(box_gsb)
+		scope_box.pack_start(box_lsb)
+		
+		
+		"""
+			Word completion entries
+		"""
 		
 		words_box = gtk.VBox(False, 0)
 		words_box.set_border_width(25)
 		
-		words_label = gtk.Label("Enter words you want to have in the completion list by default : ")
+		box_words_label = gtk.HBox(False,10)
+		words_label = gtk.Label("<b>Completion words</b>")
+		words_label.set_use_markup(True)
+		words_label.set_justify(gtk.JUSTIFY_LEFT)
+		box_words_label.pack_start(words_label, False, False, 0)
+		
+		words_label_description = gtk.Label("    <i>Enter words you want to have in the completion list by default : </i>")
+		words_label_description.set_use_markup(True)
+		words_label_description.set_justify(gtk.JUSTIFY_LEFT)
 		words_text_view = gtk.TextView()
 		words_text_view.set_editable(True)
 		words_text_view.set_wrap_mode(gtk.WRAP_WORD)
 		words_text_view.set_border_width(0)
-		words_text_view.set_size_request(-1, 110)
+		words_text_view.set_size_request(-1, 150)
 		words_text_view.set_left_margin(3)
 		words_text_view.set_right_margin(3)
 		
@@ -164,7 +194,8 @@ class ConfigurationDialog(gtk.Dialog):
 		
 		self.words_buffer = words_buffer
 		
-		words_box.pack_start(words_label, True, True, 10)
+		words_box.pack_start(box_words_label, False, False, 10)
+		words_box.pack_start(words_label_description, False, False, 0)
 		sw = gtk.ScrolledWindow()
 		sw.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
 		sw.set_shadow_type(gtk.SHADOW_IN)
@@ -172,7 +203,7 @@ class ConfigurationDialog(gtk.Dialog):
 		words_box.add(sw)
 		
 		self.vbox.pack_start(scope_box, True, True, 0)
-		self.vbox.add(words_box)
+		self.vbox.pack_start(words_box)
 		self.show()
 		self.vbox.show_all()
 	

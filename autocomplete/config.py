@@ -19,9 +19,11 @@
  Boston, MA  02110-1301  USA
 """
 
+import gedit
 import pygtk
 pygtk.require('2.0')
 import gtk
+import gtksourceview2
 import os.path
 from xml.parsers import expat
 
@@ -119,7 +121,7 @@ class ConfigurationDialog(gtk.Dialog):
 		close_button.connect_object("clicked", gtk.Widget.destroy,self)
 		
 		scope_box = gtk.VBox(False, 0)
-		scope_box.set_border_width(25)
+		scope_box.set_border_width(15)
 		
 		box_scope_label = gtk.HBox(False,10)
 		scope_label = gtk.Label("<b>Scope</b>")
@@ -167,7 +169,7 @@ class ConfigurationDialog(gtk.Dialog):
 		"""
 		
 		words_box = gtk.VBox(False, 0)
-		words_box.set_border_width(25)
+		words_box.set_border_width(15)
 		
 		box_words_label = gtk.HBox(False,10)
 		words_label = gtk.Label("<b>Completion words</b>")
@@ -178,29 +180,55 @@ class ConfigurationDialog(gtk.Dialog):
 		words_label_description = gtk.Label("    <i>Enter words you want to have in the completion list by default : </i>")
 		words_label_description.set_use_markup(True)
 		words_label_description.set_justify(gtk.JUSTIFY_LEFT)
-		words_text_view = gtk.TextView()
-		words_text_view.set_editable(True)
-		words_text_view.set_wrap_mode(gtk.WRAP_WORD)
-		words_text_view.set_border_width(0)
-		words_text_view.set_size_request(-1, 150)
-		words_text_view.set_left_margin(3)
-		words_text_view.set_right_margin(3)
+		
+		words_box.pack_start(box_words_label, False, False, 0)
+		words_box.pack_start(words_label_description, False, False, 10)
+		
+		""" Languages discovery """
+		
+		manager = gtksourceview2.LanguageManager()
+		#manager.set_search_path(dirs + self.manager.get_search_path())
+		langs = gedit.language_manager_list_languages_sorted(manager, True)
+		langs_model = gtk.ListStore(str,object)
+		for lang in langs:
+			langs_model.append([lang.get_name(),lang])
+		
+		langs_model.prepend(['Global', None])
+		box_langs = gtk.HBox(False,0)
+		box_langs.set_size_request(150,200)
+		lang_list = gtk.TreeView(langs_model)
+		cell = gtk.CellRendererText()
+		lang_column = gtk.TreeViewColumn('Language', cell)
+		lang_column.set_attributes(cell, text=0)
+		lang_list.append_column(lang_column)
+		
+		
+		lang_text_view = gtk.TextView()
+		lang_text_view.set_editable(True)
+		lang_text_view.set_wrap_mode(gtk.WRAP_WORD)
+		lang_text_view.set_border_width(0)
+		lang_text_view.set_left_margin(3)
+		lang_text_view.set_right_margin(3)
+		sw_lang_text = gtk.ScrolledWindow()
+		sw_lang_text.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
+		sw_lang_text.set_shadow_type(gtk.SHADOW_IN)
+		sw_lang_text.add(lang_text_view)
 		
 		words_buffer = gtk.TextBuffer()
 		
 		words_buffer.set_text(self.config.get_base_words())
-		words_text_view.set_buffer(words_buffer)
+		lang_text_view.set_buffer(words_buffer)
 		words_buffer.connect_object("changed", self.configuration_change,None)
 		
 		self.words_buffer = words_buffer
 		
-		words_box.pack_start(box_words_label, False, False, 10)
-		words_box.pack_start(words_label_description, False, False, 0)
-		sw = gtk.ScrolledWindow()
-		sw.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
-		sw.set_shadow_type(gtk.SHADOW_IN)
-		sw.add(words_text_view)
-		words_box.add(sw)
+		sw_langs = gtk.ScrolledWindow()
+		sw_langs.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
+		sw_langs.set_shadow_type(gtk.SHADOW_IN)
+		sw_langs.add(lang_list)
+		box_langs.pack_start(sw_langs, True, True, 0)
+		box_langs.pack_start(sw_lang_text, True, True, 0)
+		words_box.pack_start(box_langs, True, True, 0)	
 		
 		self.vbox.pack_start(scope_box, True, True, 0)
 		self.vbox.pack_start(words_box)

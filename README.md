@@ -47,6 +47,14 @@ don't know what one was the first but this one is a product by:
 
 Changes
 -------
+> @2009-10-17  
+> Merged the configurable branch.Renamed the version to 0.9.8
+> 
+>   * The completion behavior can be one of the following :
+>      * global : each window shares their words, so any word in any window is eligible for completion anywhere
+>      * local : each window only knows its own words, so only those are eligible for completion in the window.
+>   * A global list of predefined words is available in any window.
+>   * A configuration dialog is available to tweak the above settings.
 
 > @2009-10-03  
 > Added an plugin icon.Renamed the version to 0.9.7

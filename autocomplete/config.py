@@ -32,7 +32,7 @@ class ConfigModel():
 	def __init__(self, filepath):
 		# init default values
 		self.scope = "global"
-		self.base_words = ""
+		self.lang_words = {}
 		self.filepath = filepath
 		self.sv = ConfigService(self, filepath)
 		
@@ -48,17 +48,31 @@ class ConfigModel():
 	def set_scope(self,value):
 		self.scope = value
 		
-	def get_base_words(self):
-		return self.base_words
+	def get_words(self):
+		# TODO make a copy
+		return self.lang_words
 		
-	def set_base_words(self,value):
-		self.base_words = value
+	def set_words(self,value):
+		self.lang_words = value
+		
+	def get_lang_words(self,lang):
+		try:
+			words = self.lang_words[lang]
+			return words
+		except:
+			return ''
+		
+	
+	def set_lang_words(self,lang,value):
+		self.lang_words[lang] = value
 
 class ConfigService():
 	def __init__(self, config, filepath):
 		self.file = os.path.expanduser(str(filepath))
 		self.config = config
 		self.current_tag = None
+		self.current_lang = None
+		self.langs = None
 	
 	def load(self):
 		
@@ -82,8 +96,12 @@ class ConfigService():
 		fp = file(self.file, "wb")
 		fp.write('<?xml version="1.0" encoding="UTF-8"?>\n')
 		scope_dump = '    <scope>%s</scope>\n' % self._escape(self.config.get_scope())
-		base_words_dump = '    <words>%s</words>\n' % self._escape(self.config.get_base_words())
-		settings = '<autocomplete>\n%s</autocomplete>\n' % (scope_dump+base_words_dump);
+		lang_words_list_dump = ''
+		lang_words_map = self.config.get_words()
+		for lang in lang_words_map:
+			lang_words_list_dump += '        <lang name="%s">%s</lang>\n' % (self._escape(lang) , self._escape(lang_words_map[lang]))
+		words_dump = '    <langs>\n%s    </langs>\n' % lang_words_list_dump
+		settings = '<autocomplete>\n%s</autocomplete>\n' % (scope_dump+words_dump);
 		fp.write(settings)
 		fp.close()
 		
@@ -96,15 +114,29 @@ class ConfigService():
 	def __start_element(self, tag, attrs):
 		if tag == 'scope':
 			self.current_tag = 'scope'
-		elif tag == 'words':
-			self.current_tag = 'words'
+		elif tag == 'langs':
+			self.current_tag = 'langs'
+			self.langs = {}
+		elif tag == 'lang':
+			self.current_tag = 'lang'
+			self.current_lang = attrs['name']
+		
+	
 	def __end_element(self, tag):
 		self.current_tag = None
+		if tag == 'langs':
+			self.config.set_words(self.langs)
+		
+	
 	def __character_data(self, data):
 		if self.current_tag == 'scope':
 			self.config.set_scope(data)
-		elif self.current_tag == 'words':
-			self.config.set_base_words(data)
+		elif self.current_tag == 'langs':
+			pass
+		elif self.current_tag == 'lang':
+			self.langs[self.current_lang] = data
+		
+	
 	
 class ConfigurationDialog(gtk.Dialog):
 	def __init__(self,config,callback):
@@ -113,12 +145,14 @@ class ConfigurationDialog(gtk.Dialog):
 		self.config = config
 		self.callback = callback
 		
-		close_button = self.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
-		close_button.grab_default()
+		validate_button = self.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+		validate_button.grab_default()
+		#cancel_button = self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
 		help_button = self.add_button(gtk.STOCK_HELP, gtk.RESPONSE_HELP)
 		
+		validate_button.connect_object("clicked", self.on_validate,None)
+		#cancel_button.connect_object("clicked", gtk.Widget.destroy, self)
 		help_button.connect_object("clicked", self.show_help_dialog,None)
-		close_button.connect_object("clicked", gtk.Widget.destroy,self)
 		
 		scope_box = gtk.VBox(False, 0)
 		scope_box.set_border_width(15)
@@ -153,7 +187,8 @@ class ConfigurationDialog(gtk.Dialog):
 		# NOTE : if connecting to local_scope_button too, even with clicked, 
 		# 		 the callback function is called twice.
 		#		 So we just connect that button
-		global_scope_button.connect_object("toggled", self.configuration_change,None)
+		#-- disabled. save is done on closing
+		#global_scope_button.connect_object("toggled", self.configuration_change,None)
 		
 		self.global_scope_button = global_scope_button;
 		self.local_scope_button = local_scope_button;
@@ -189,11 +224,20 @@ class ConfigurationDialog(gtk.Dialog):
 		manager = gtksourceview2.LanguageManager()
 		#manager.set_search_path(dirs + self.manager.get_search_path())
 		langs = gedit.language_manager_list_languages_sorted(manager, True)
+		# Stores lang name / words
 		langs_model = gtk.ListStore(str,object)
 		for lang in langs:
-			langs_model.append([lang.get_name(),lang])
+			document = gedit.Document()
+			# NOTE : room for optimization here. Set language when requesting to show the View instead of now
+			document.set_language(lang)
+			document.set_text(self.config.get_lang_words(lang.get_name()))
+			lang_text_view = gedit.View(document)
+			langs_model.append([lang.get_name(), lang_text_view])
 		
-		langs_model.prepend(['Global', None])
+		global_document = gedit.Document()
+		global_document.set_text(self.config.get_lang_words('Global'))
+		global_lang_text_view = gedit.View(global_document)
+		langs_model.prepend(['Global', global_lang_text_view])
 		box_langs = gtk.HBox(False,0)
 		box_langs.set_size_request(150,200)
 		lang_list = gtk.TreeView(langs_model)
@@ -202,49 +246,63 @@ class ConfigurationDialog(gtk.Dialog):
 		lang_column.set_attributes(cell, text=0)
 		lang_list.append_column(lang_column)
 		
+		langs_selection = lang_list.get_selection()
+		langs_selection.connect('changed', self.lang_list_selection_change)
+		# Select the first element, 'Global'.
+		iter = langs_model.get_iter_first()
+		langs_selection.select_iter(iter)
 		
-		lang_text_view = gtk.TextView()
-		lang_text_view.set_editable(True)
-		lang_text_view.set_wrap_mode(gtk.WRAP_WORD)
-		lang_text_view.set_border_width(0)
-		lang_text_view.set_left_margin(3)
-		lang_text_view.set_right_margin(3)
-		sw_lang_text = gtk.ScrolledWindow()
-		sw_lang_text.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
-		sw_lang_text.set_shadow_type(gtk.SHADOW_IN)
-		sw_lang_text.add(lang_text_view)
+		sw_lang_views = gtk.ScrolledWindow()
+		sw_lang_views.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
+		sw_lang_views.set_shadow_type(gtk.SHADOW_IN)
 		
-		words_buffer = gtk.TextBuffer()
-		
-		words_buffer.set_text(self.config.get_base_words())
-		lang_text_view.set_buffer(words_buffer)
-		words_buffer.connect_object("changed", self.configuration_change,None)
-		
-		self.words_buffer = words_buffer
-		
+		# Add list
 		sw_langs = gtk.ScrolledWindow()
 		sw_langs.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
 		sw_langs.set_shadow_type(gtk.SHADOW_IN)
 		sw_langs.add(lang_list)
+		
+		# pack everything
 		box_langs.pack_start(sw_langs, True, True, 0)
-		box_langs.pack_start(sw_lang_text, True, True, 0)
+		box_langs.pack_start(sw_lang_views, True, True, 0)
 		words_box.pack_start(box_langs, True, True, 0)	
 		
 		self.vbox.pack_start(scope_box, True, True, 0)
 		self.vbox.pack_start(words_box)
 		self.show()
 		self.vbox.show_all()
+		
+		self.langs_model = langs_model
+		self.sw_lang_views = sw_lang_views
+		self.sw_lang_views.add(global_lang_text_view)
+	
+	def lang_list_selection_change(self, treeselection):
+		# retrieve gedit.view in treeview model
+		selected_item = treeselection.get_selected()
+		view = selected_item[0].get_value(selected_item[1],1)
+		self.sw_lang_views.remove(self.sw_lang_views.get_child())
+		self.sw_lang_views.add(view)
 	
 	def get_config(self):
 		return self.config
 	
-	def configuration_change(self,widget,data=None):
+	def on_validate(self,widget,data=None):
+		self.commit()
+		gtk.Widget.destroy(self)
+	
+	def commit(self):
 		if self.global_scope_button.get_active():
 			self.config.set_scope("global")
 		else:
 			self.config.set_scope("local")
 		
-		self.config.set_base_words(self.words_buffer.get_text(self.words_buffer.get_start_iter(),self.words_buffer.get_end_iter(),True))
+		lang_words = {}
+		for lang_item in self.langs_model:
+			document = lang_item[1].get_buffer()
+			""" may need to pass False instead of True (actually, include hidden chars) """
+			lang_words[lang_item[0]] = document.get_text(document.get_start_iter(),document.get_end_iter(), True) 
+			
+		self.config.set_words(lang_words)
 		self.config.save()
 		self.callback()
 	

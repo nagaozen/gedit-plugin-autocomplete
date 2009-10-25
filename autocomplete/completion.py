@@ -573,7 +573,13 @@ class AutoCompleteEngine():
 		"""Scan document for new words."""
 		self.dictionary_words = set([])
 		self.scan_doc(doc,what_to_scan)
-		self.scan_text(self.config.get_base_words(),what_to_scan)
+		# Add global words and document's language words
+		words = self.config.get_global_words()
+		lang = self.window.get_active_document().get_language()
+		if not lang is None:
+			words = words + ' ' + self.config.get_lang_words(lang.get_name())
+		
+		self.scan_text(words,what_to_scan)
 		self.dictionary_words = list(self.dictionary_words)
 		self.dictionary_words.sort()
 

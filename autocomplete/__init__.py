@@ -85,7 +85,7 @@ class AutoCompletePlugin(gedit.Plugin):
 		self.eng_map = {}
 		self.words = {}
 		self.dictionary_words = []
-		for window2 in ws:
-			self.activate(window2)
+		for w2 in ws:
+			self.activate(w2)
 		
 	

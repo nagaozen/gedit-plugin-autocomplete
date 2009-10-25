@@ -55,6 +55,9 @@ class ConfigModel():
 	def set_words(self,value):
 		self.lang_words = value
 		
+	def get_global_words(self):
+		return self.get_lang_words('Global')
+		
 	def get_lang_words(self,lang):
 		try:
 			words = self.lang_words[lang]
@@ -288,7 +291,7 @@ class ConfigurationDialog(gtk.Dialog):
 	
 	def on_validate(self,widget,data=None):
 		self.commit()
-		gtk.Widget.destroy(self)
+		self.destroy()
 	
 	def commit(self):
 		if self.global_scope_button.get_active():

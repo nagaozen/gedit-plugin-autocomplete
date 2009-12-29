@@ -1,24 +1,36 @@
 gEdit Autocomplete
 ==================
 
-This plugin provides a popup with the possible completions available in the 
-opened documents. This version is the very same of Alin Avasilcutei 0.9.6 and 
-the only difference is that instead of using Tab to complete, it's now using 
-Enter. This change is useful to make the plugin play nice with the snippets 
-plugin - a super useful built-in plugin that no one could live without.
+gEdit Autocomplete suggests word completions based on the text in the active
+document. It first attempts to suggest compound words for a given word start,
+and only if such words do not exist it resorts to suggesting simple words.
+
+Compond words consist of simple words joined via concatenators. The inbuild
+concatenators are targeting c-family, pascal-family, urls and emails:
+
+* `.`
+* `:`
+* `->`
+* `::`
+* `://`
+* `@`
+
+This version uses `Return` instead of `Tab`, so it plays nice with the snippets 
+plugin.
 
 Installation
 ------------
 1. Run the `install` script
 2. Open gedit and click `Edit -> Preferences -> Plugins`
-3. Check the `Autocomplete-0.9.7` and hit `Close`
+3. Check the `Autocomplete-0.9.x` and hit `Close`
 4. That's it! Now you can start coding and watch the popup working. Hit `Return`
    to accept the completion.
 
 License
 -------
 
-Copyright (C) 2009 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/), [Vincent Petithory](http://blog.lunar-dev.net/)
+Copyright (C) 2009 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/),
+[Vincent Petithory](http://blog.lunar-dev.net/)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
@@ -36,19 +48,18 @@ Place, Suite 330, Boston, MA 02111-1307 USA
 Credits
 -------
 
-There are a lot of completions plugins in the Gnome GEdit Plugins page, and I 
+There are a lot of completions plugins in the Gnome gEdit Plugins page, and I 
 don't know what one was the first but this one is a product by:
 
 - Initial version: Osmo Salomaa <http://users.tkk.fi/~otsaloma/gedit/>
 - 0.9.6: Alin Avasilcutei <http://gedit-autocomp.sourceforge.net/>
-- 0.9.6-Return: Fabio Nagao <http://zend.lojcomm.com.br/>
-- 0.9.7: Vincent Petithory <http://blog.lunar-dev.net/> (from 0.9.6-Return)
+- 0.9.x: Fabio Nagao <http://zend.lojcomm.com.br/> and Vincent Petithory <http://blog.lunar-dev.net/>
 
 
 Changes
 -------
 > @2009-10-17  
-> Merged the configurable branch.Renamed the version to 0.9.8
+> Merged the configurable branch. Renamed the version to 0.9.8
 > 
 >   * The completion behavior can be one of the following :
 >      * global : each window shares their words, so any word in any window is eligible for completion anywhere

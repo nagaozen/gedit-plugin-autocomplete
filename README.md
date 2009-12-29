@@ -1,4 +1,4 @@
-GEdit Autocomplete
+gEdit Autocomplete
 ==================
 
 This plugin provides a popup with the possible completions available in the 

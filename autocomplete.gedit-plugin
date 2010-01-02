@@ -2,9 +2,9 @@
 Loader=python
 Module=autocomplete
 IAge=2
-Name=Autocomplete-0.9.9
-Icon=gedit-plugin-autocomplete
-Description=Select from a list of Autocomplete options
-Authors=Vincent Petithory <vincent.petithory@gmail.com>\nhttp://blog.lunar-dev.net/\nFabio Nagao <nagaozen@hotmail.com>\nhttp://zend.lojcomm.com.br/\nAlin Avasilcutei <avasilcuteia@gmail.com>\nhttp://www.geocities.com/avasilcuteia\n\nOsmo Salomaa <otsaloma@cc.hut.fi>\nhttp://users.tkk.fi/~otsaloma/
-Copyright=Copyright © 2009 Vincent Petithory\nCopyright © 2009 Fabio Nagao\nCopyright © 2006 Alin Avasilcutei\nCopyright © 2006 Information Technology Group\n[www.itgroup.ro]\n
-Website=http://github.com/nagaozen/gedit-plugin-autocomplete
+Name=AutoComplete-0.10.0
+Icon=gtk-clear
+Description=Suggests word completions
+Authors=Fabio Zendhi Nagao <nagaozen@hotmail.com>\nhttp://zend.lojcomm.com.br/\nVincent Petithory <vincent.petithory@gmail.com>\nhttp://blog.lunar-dev.net/
+Copyright=Copyright © 2009 Fabio Zendhi Nagao, Vincent Petithory\nCopyright © 2006 Alin Avasilcutei, Osmo Salomaa
+Website=http://github.com/nagaozen/gedit-plugin-autocomplete/

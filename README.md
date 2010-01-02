@@ -53,11 +53,20 @@ don't know what one was the first but this one is a product by:
 
 - Initial version: Osmo Salomaa <http://users.tkk.fi/~otsaloma/gedit/>
 - 0.9.6: Alin Avasilcutei <http://gedit-autocomp.sourceforge.net/>
-- 0.9.x: Fabio Nagao <http://zend.lojcomm.com.br/> and Vincent Petithory <http://blog.lunar-dev.net/>
+- 0.9.x, 0.10.x: Fabio Nagao <http://zend.lojcomm.com.br/> and Vincent Petithory <http://blog.lunar-dev.net/>
 
 
 Changes
 -------
+> @2010-01-02  
+> Plugin completely rewritten. Notable features:
+>   * Accepts a global list of static words available for all kind of documents
+>   * Accepts a list of static words for each language -- useful for constants, static methods etc
+>   * Accepts a library to handle dynamic instances -- intellisense like
+>   * Tips are now sorted
+>   * Configurations based on json.
+>   * Removed all install and non-standard icons things. Installation is easy as copy and paste inside `~/.gnome2/gedit/plugins/`
+
 > @2009-10-17  
 > Merged the configurable branch. Renamed the version to 0.9.8
 > 

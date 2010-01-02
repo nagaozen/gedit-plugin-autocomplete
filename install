@@ -4,5 +4,5 @@ rm -R $HOME/.gnome2/gedit/plugins/autocomplete
 mkdir -p $HOME/.gnome2/gedit/plugins/autocomplete
 cp -v -f ./autocomplete/*.py $HOME/.gnome2/gedit/plugins/autocomplete
 cp -v -f autocomplete.gedit-plugin $HOME/.gnome2/gedit/plugins
-cp -v -f autocomplete_settings-base.xml $HOME/.gnome2/gedit/autocomplete_settings.xml
+cp -v -f settings-base.xml $HOME/.gnome2/gedit/plugins/autocomplete/settings.xml
 cp -v -f -r ./icons $HOME/.local/share

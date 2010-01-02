@@ -60,6 +60,7 @@ Changes
 -------
 > @2010-01-02  
 > Plugin completely rewritten. Notable features:
+> 
 >   * Accepts a global list of static words available for all kind of documents
 >   * Accepts a list of static words for each language -- useful for constants, static methods etc
 >   * Accepts a library to handle dynamic instances -- intellisense like

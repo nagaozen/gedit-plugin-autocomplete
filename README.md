@@ -22,7 +22,7 @@ Installation
 ------------
 1. Run the `install` script
 2. Open gedit and click `Edit -> Preferences -> Plugins`
-3. Check the `Autocomplete-0.9.x` and hit `Close`
+3. Check the `Autocomplete-x.x.x` and hit `Close`
 4. That's it! Now you can start coding and watch the popup working. Hit `Return`
    to accept the completion.
 
@@ -59,7 +59,7 @@ don't know what one was the first but this one is a product by:
 Changes
 -------
 > @2010-01-02  
-> Plugin completely rewritten. Notable features:
+> Plugin completely rewritten. Renamed the version to 0.10.0. Notable features:
 > 
 >   * Accepts a global list of static words available for all kind of documents
 >   * Accepts a list of static words for each language -- useful for constants, static methods etc

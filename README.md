@@ -18,9 +18,16 @@ concatenators are targeting c-family, pascal-family, urls and emails:
 This version uses `Return` instead of `Tab`, so it plays nice with the snippets 
 plugin.
 
+Demo
+----
+
+[A demo of this plugin working](http://www.youtube.com/watch?v=BMbkbhNsVkk) -
+with snippets and classbrowser, of course - is available at youtube! You can
+check it working before downloading.
+
 Installation
 ------------
-1. Run the `install` script
+1. Copy both `autocomplete.gedit-plugin` and `autocomplete` folder to `~/.gnome2/gedit/plugins`
 2. Open gedit and click `Edit -> Preferences -> Plugins`
 3. Check the `Autocomplete-x.x.x` and hit `Close`
 4. That's it! Now you can start coding and watch the popup working. Hit `Return`

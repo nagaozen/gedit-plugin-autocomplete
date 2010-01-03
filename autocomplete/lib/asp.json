@@ -3,7 +3,11 @@
     "dynamic": {
         "identificators": [
             "(?P<instance>[a-zA-Z0-9_]+)\\s*=\\s*Server.createObject\\(\\\"(?P<class>[a-zA-Z0-9_.]+)\\\"\\)",
-            "(?P<instance>[a-zA-Z0-9_]+)\\s*=\\s*new ActiveXObject\\(\\\"(?P<class>[a-zA-Z0-9_.]+)\\\"\\)"
+            "(?P<instance>[a-zA-Z0-9_]+)\\s*=\\s*new ActiveXObject\\(\\\"(?P<class>[a-zA-Z0-9_.]+)\\\"\\)",
+            "(?P<instance>[a-zA-Z0-9_]+)\\s*=\\s*[a-zA-Z0-9_]+\\.(?P<class>getDrive)\\(",
+            "(?P<instance>[a-zA-Z0-9_]+)\\s*=\\s*[a-zA-Z0-9_]+\\.(?P<class>getFile)\\(",
+            "(?P<instance>[a-zA-Z0-9_]+)\\s*=\\s*[a-zA-Z0-9_]+\\.(?P<class>getFolder)\\(",
+            "(?P<instance>[a-zA-Z0-9_]+)\\s*=\\s*[a-zA-Z0-9_]+\\.(?P<class>createTextFile)\\("
         ],
         "members": {
             "ADODB.Command": "activeConnection commandStream commandText commandTimeOut commandType dialect name NamedParameters[] Parameters[] prepared Properties[] state cancel() createParameter([name,type,direction,size,value]) execute([recordsAffected,parameters,options])",
@@ -14,7 +18,12 @@
             "ADODB.Property": "attributes name type value",
             "ADODB.Record": "activeConnection Fields[] mode parentURL Properties[] recordType source state cancel() close() copyRecord([source,destination,userName,password,options,async]) deleteRecord([source,async]) getChildren() moveRecord([source,destination,userName,password,options,async]) open([source,activeConnection,mode,createOptions,options,userName,password])",
             "ADODB.Recordset": "absolutePage absolutePosition activeCommand activeConnection bof eof bookmark cacheSize cursorLocation cursorType dataMember dataSource editMode Fields[] filter index lockType marshalOptions maxRecords pageCount pageSize Properties[] recordCount sort source state status stayInSync addNew([fieldList,values]) cancel() cancelBatch([affectedRecords]) cancelUpdate() clone([lockType]) close() compareBookmarks(bookmark1,bookmark2) delete([affectedRecords]) find(criteria[,skipRows,searchDirection,start]) getRows([rows,start,field]) getString(stringFormat[,numRows,columnDelimiter,rowDelimiter,nullExpr]) move(numRecords[,start]) moveFirst() moveLast() moveNext() movePrevious() nextRecordset([recordsAffected]) open([source,activeConnection,cursorType,lockType,options]) requery([options]) reSync([affectedRecords,reSyncValues]) save([destination,persistFormat]) seek(keyValues,seekOption) supports(cursorOptions) update([affectedRecords,preserveStatus]) updateBatch([fields,values])",
-            "ADODB.Stream": "charset eos lineSeparator mode position size state type cancel() close() copyTo(destStream[,numchars]) flush() loadFromFile(fileName) open([source,mode,openOptions,userName,password]) read([numbytes]) readText([numchars]) saveToFile(fileName[,saveOptions]) setEOS() skipLine() stat(statStg,statFlag) write(buffer) writeText(data[,options])"
+            "ADODB.Stream": "charset eos lineSeparator mode position size state type cancel() close() copyTo(destStream[,numchars]) flush() loadFromFile(fileName) open([source,mode,openOptions,userName,password]) read([numbytes]) readText([numchars]) saveToFile(fileName[,saveOptions]) setEOS() skipLine() stat(statStg,statFlag) write(buffer) writeText(data[,options])",
+            "Scripting.FileSystemObject": "Drives[] buildPath(path,name) copyFile(source,destination[,overwrite]) copyFolder(source,destination[,overwrite]) createFolder(folderName) createTextFile(fileName[,overwrite,unicode]) deleteFile(fileSpec[,force]) deleteFolder(folderSpec[,force]) driveExists(driveSpec) fileExists(fileSpec) folderExists(folderSpec) getAbsolutePathName(pathSpec) getBaseName(path) getDrive(driveSpec) getDriveName(path) getExtensionName(path) getFile(fileSpec) getFileName(pathSpec) getFileVersion(pathSpec) getFolder(folderSpec) getParentFolderName(path) getSpecialFolder(folderSpec) getStandardStream(standardStreamType[,unicode]) getTempName() moveFile(source,destination) moveFolder(source,destination) openTextFile(fileName[,ioMode,create,format])",
+            "getDrive": "availableSpace driveLetter driveType fileSystem freeSpace isReady path rootFolder serialNumber shareName totalSize volumeName",
+            "getFile": "attributes dateCreated dateLastAccessed dateLastModified drive name parentFolder path shortName shortPath size type copy(destination[,overwrite]) delete([force]) move(destination) openAsTextStream([ioMode,format])",
+            "getFolder": "attributes dateCreated dateLastAccessed dateLastModified drive Files[] isRootFolder name parentFolder path shortName shortPath size SubFolders[] type copy(destination[,overwrite]) delete([force]) move(destination) createTextFile(fileName[,overwrite,unicode])",
+            "createTextFile": "atEndOfLine atEndOfStream column line close() read(characters) readAll() readLine() skip(characters) skipLine() write(string) writeBlankLines(lines) writeLine([string])"
         },
         "tokenSeparator": "."
     }

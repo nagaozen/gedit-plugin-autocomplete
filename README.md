@@ -22,8 +22,10 @@ Demo
 ----
 
 [A demo of this plugin working](http://www.youtube.com/watch?v=BMbkbhNsVkk) -
-with snippets and classbrowser, of course - is available at youtube! You can
+with snippets and classbrowser, of course - is available at YouTube! You can
 check it working before downloading.
+
+<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/BMbkbhNsVkk&amp;hl=en_US&amp;fs=1&amp;"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/BMbkbhNsVkk&amp;hl=en_US&amp;fs=1&amp;" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
 
 Installation
 ------------

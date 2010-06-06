@@ -35,6 +35,8 @@ Installation
 4. That's it! Now you can start coding and watch the popup working. Hit `Return`
    to accept the completion.
 
+**NOTE:** Windows users should follow the instructions of <http://zend.lojcomm.com.br/entries/setting-autocomplete-to-work-in-windows-gedit/>
+
 License
 -------
 
@@ -67,6 +69,9 @@ don't know what one was the first but this one is a product by:
 
 Changes
 -------
+> @2010-06-06  
+> Updated some lines in settings.py to make it compatible with the windows version.
+
 > @2010-01-02  
 > Plugin completely rewritten. Renamed the version to 0.10.0. Notable features:
 > 

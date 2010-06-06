@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import gedit
 import json
 import os.path
 
@@ -24,7 +25,7 @@ class SettingsModel():
         self._caller = caller
         
         self.source  = "MIXED"
-        self.path    = "~/.gnome2/gedit/plugins/autocomplete/"
+        self.path    = gedit.Plugin.get_data_dir(caller._plugin) + "/"
         
         self._persistenceService = PersistenceService(self)
     

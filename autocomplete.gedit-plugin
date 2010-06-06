@@ -2,7 +2,7 @@
 Loader=python
 Module=autocomplete
 IAge=2
-Name=AutoComplete-0.10.0
+Name=AutoComplete-0.10.1
 Icon=gtk-clear
 Description=Suggests word completions
 Authors=Fabio Zendhi Nagao <nagaozen@hotmail.com>\nhttp://zend.lojcomm.com.br/\nVincent Petithory <vincent.petithory@gmail.com>\nhttp://blog.lunar-dev.net/

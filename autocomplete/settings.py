@@ -17,6 +17,7 @@
 
 import gedit
 import json
+import os
 import os.path
 
 class SettingsModel():
@@ -25,7 +26,7 @@ class SettingsModel():
         self._caller = caller
         
         self.source  = "MIXED"
-        self.path    = gedit.Plugin.get_data_dir(caller._plugin) + "/"
+        self.path    = gedit.Plugin.get_data_dir(caller._plugin) + os.sep
         
         self._persistenceService = PersistenceService(self)
     

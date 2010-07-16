@@ -24,6 +24,7 @@ from settings import SettingsModel
 class ConfigurationDialog(gtk.Dialog):
     
     def __init__(self, caller):
+        self._plugin = caller
         self._model = SettingsModel(self)
         self._model.load()
         

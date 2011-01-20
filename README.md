@@ -69,6 +69,9 @@ don't know what one was the first but this one is a product by:
 
 Changes
 -------
+> @2011-01-20  
+> Adding 0.10.0 tag
+
 > @2010-06-06  
 > Updated some lines in settings.py to make it compatible with the windows version.
 

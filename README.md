@@ -2,21 +2,7 @@ gEdit Autocomplete
 ==================
 
 gEdit Autocomplete suggests word completions based on the text in the active
-document. It first attempts to suggest compound words for a given word start,
-and only if such words do not exist it resorts to suggesting simple words.
-
-Compond words consist of simple words joined via concatenators. The inbuild
-concatenators are targeting c-family, pascal-family, urls and emails:
-
-* `.`
-* `:`
-* `->`
-* `::`
-* `://`
-* `@`
-
-This version uses `Return` instead of `Tab`, so it plays nice with the snippets 
-plugin.
+document and in an additional language library file.
 
 Demo
 ----
@@ -31,9 +17,8 @@ Installation
 ------------
 1. Copy both `autocomplete.gedit-plugin` and `autocomplete` folder to `~/.gnome2/gedit/plugins`
 2. Open gedit and click `Edit -> Preferences -> Plugins`
-3. Check the `Autocomplete-x.x.x` and hit `Close`
-4. That's it! Now you can start coding and watch the popup working. Hit `Return`
-   to accept the completion.
+3. Check the `Autocomplete (gedit-json-completion)` and hit `Close`
+4. That's it! Now you can start coding and watch the popup working. Hit `Return` or `Tab` to accept the completion.
 
 **NOTE:** Windows users should follow the instructions of <http://zend.lojcomm.com.br/entries/setting-autocomplete-to-work-in-windows-gedit/>
 
@@ -65,11 +50,13 @@ don't know what one was the first but this one is a product by:
 - Initial version: Osmo Salomaa <http://users.tkk.fi/~otsaloma/gedit/>
 - 0.9.6: Alin Avasilcutei <http://gedit-autocomp.sourceforge.net/>
 - 0.9.x, 0.10.x: Fabio Nagao <http://zend.lojcomm.com.br/> and Vincent Petithory <http://blog.lunar-dev.net/>
+- 0.11.0: Fabio Nagao <http://zend.lojcomm.com.br/>
 
 
 Changes
 -------
 > @2011-01-20  
+> Releasing 0.11.0
 > Adding 0.10.0 tag
 
 > @2010-06-06  

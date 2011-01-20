@@ -18,15 +18,15 @@ Installation
 1. Copy both `autocomplete.gedit-plugin` and `autocomplete` folder to `~/.gnome2/gedit/plugins`
 2. Open gedit and click `Edit -> Preferences -> Plugins`
 3. Check the `Autocomplete (gedit-json-completion)` and hit `Close`
-4. That's it! Now you can start coding and watch the popup working. Hit `Return` or `Tab` to accept the completion.
+4. Check the `Word Completion` and hit `Close`
+5. That's it! Now you can start coding and watch the popup working. Hit `Return` or `Tab` to accept the completion.
 
 **NOTE:** Windows users should follow the instructions of <http://zend.lojcomm.com.br/entries/setting-autocomplete-to-work-in-windows-gedit/>
 
 License
 -------
 
-Copyright (C) 2009 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/),
-[Vincent Petithory](http://blog.lunar-dev.net/)
+Copyright (C) 2011 [Fabio Zendhi Nagao](http://zend.lojcomm.com.br/)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

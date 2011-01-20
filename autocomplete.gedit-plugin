@@ -2,9 +2,8 @@
 Loader=python
 Module=autocomplete
 IAge=2
-Name=AutoComplete-0.10.1
-Icon=gtk-clear
-Description=Suggests word completions
-Authors=Fabio Zendhi Nagao <nagaozen@hotmail.com>\nhttp://zend.lojcomm.com.br/\nVincent Petithory <vincent.petithory@gmail.com>\nhttp://blog.lunar-dev.net/
-Copyright=Copyright © 2009 Fabio Zendhi Nagao, Vincent Petithory\nCopyright © 2006 Alin Avasilcutei, Osmo Salomaa
+Name=AutoComplete (gedit-json-completion)
+Description=Suggests word completions based on a json library.
+Authors=Fabio Zendhi Nagao <nagaozen@hotmail.com>\nhttp://zend.lojcomm.com.br/
+Copyright=Copyright © 2011 Fabio Zendhi Nagao
 Website=http://github.com/nagaozen/gedit-plugin-autocomplete/

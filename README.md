@@ -56,7 +56,7 @@ don't know what one was the first but this one is a product by:
 Changes
 -------
 > @2011-01-20  
-> Releasing 0.11.0
+> Releasing 0.11.0  
 > Adding 0.10.0 tag
 
 > @2010-06-06  

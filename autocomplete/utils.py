@@ -27,7 +27,7 @@ def get_word(piter):
         a.backward_char()
         ch = a.get_char()
         
-        if not (ch.isalnum() or ch in ['_', ':', '.', '-', '>']):
+        if not (ch.isalnum() or ch in "_:.->"):
             a.forward_char()
             break
     

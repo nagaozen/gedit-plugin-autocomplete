@@ -23,6 +23,15 @@ Installation
 
 **NOTE:** Windows users should follow the instructions of <http://zend.lojcomm.com.br/entries/setting-autocomplete-to-work-in-windows-gedit/>
 
+Adding new library files
+------------------------
+
+To add new language libraries to gedit-json-completion, just drop a `<language_id>.json` in the lib folder. To retrieve a python list of the available languages, use:
+
+    import gtksourceview2 as _
+    lm = _.LanguageManager()
+    ids = lm.get_language_ids()
+
 License
 -------
 

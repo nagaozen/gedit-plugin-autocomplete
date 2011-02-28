@@ -1,6 +1,8 @@
 gEdit Autocomplete
 ==================
 
+**THIS PLUGIN HAS BEEN DEPRECATED IN FAVOR OF [GEDIT-PLUGIN-CODECOMPLETION](http://github.com/nagaozen/gedit-plugin-codecompletion/)**
+
 gEdit Autocomplete suggests word completions based on the text in the active
 document and in an additional language library file.
 
@@ -64,6 +66,9 @@ don't know what one was the first but this one is a product by:
 
 Changes
 -------
+> @2011-02-28  
+> Deprecated
+
 > @2011-01-20  
 > Releasing 0.11.0  
 > Adding 0.10.0 tag
